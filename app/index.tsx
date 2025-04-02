@@ -1,5 +1,5 @@
-import { Stack, Link } from 'expo-router';
+import AnimatedIntro from '~/components/AnimatedIntro';
 
 export default function Home() {
-  return <></>;
+  return <AnimatedIntro />;
 }

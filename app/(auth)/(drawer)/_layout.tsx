@@ -71,9 +71,24 @@ export function CustomDrawerContent(props: any) {
           onPress={() => router.push('/(auth)/(drawer)/explore')}
         />
       </DrawerContentScrollView>
+      <View style={{ padding: 16, paddingBottom: bottom }}>
+        <Link href="/(auth)/(modal)/settings" asChild>
+          <TouchableOpacity style={styles.footer}>
+            <Image
+              source={{ uri: 'https://galaxies.dev/img/meerkat_2.jpg' }}
+              style={styles.avatar}
+            />
+            <Text style={styles.userName}>Mika Meerkat</Text>
+            <Ionicons name="ellipsis-horizontal" size={24} color={Colors.greyLight} />
+
+            {/* <Text style={{ color: Colors.grey }}>Version 1.0.0</Text> */}
+          </TouchableOpacity>
+        </Link>
+      </View>
     </View>
   );
 }
+
 const Layout = () => {
   const navigationRef = useNavigationContainerRef();
   const dimensions = useWindowDimensions();
@@ -176,6 +191,21 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     alignItems: 'center',
     color: '#424242',
+  },
+  footer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+  },
+  userName: {
+    fontSize: 16,
+    fontWeight: '600',
+    flex: 1,
   },
 });
 

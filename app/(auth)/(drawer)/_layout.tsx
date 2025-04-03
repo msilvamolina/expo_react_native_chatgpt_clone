@@ -39,11 +39,7 @@ const Layout = () => {
     <Drawer drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen
         name="(chat)/new"
-        getId={() => Math.random().toString()}
         options={{
-          drawerLabel: 'Home',
-          drawerItemStyle: { display: 'none' }, // 👈 evita que DrawerItemList lo intente renderizar
-
           title: 'New Chat',
         }}
       />

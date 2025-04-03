@@ -1,16 +1,25 @@
 // import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 // import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 // import { DrawerActions } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import { FontAwesome, FontAwesome6, Ionicons } from '@expo/vector-icons';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import { Link, useNavigation, useRouter } from 'expo-router';
+import { DrawerActions } from '@react-navigation/native';
+import { Link, useNavigation, useNavigationContainerRef, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import { TextInput, Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  TextInput,
+  Text,
+  Image,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  useWindowDimensions,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import NewChat from './(chat)/new';
@@ -53,8 +62,31 @@ export function CustomDrawerContent(props: any) {
   );
 }
 const Layout = () => {
+  const navigationRef = useNavigationContainerRef();
+  const dimensions = useWindowDimensions();
   return (
-    <Drawer drawerContent={(props) => <CustomDrawerContent {...props} />}>
+    <Drawer
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+      screenOptions={{
+        headerLeft: () => (
+          <TouchableOpacity
+            onPress={() => navigationRef.dispatch(DrawerActions.toggleDrawer)}
+            style={{ marginLeft: 16 }}>
+            <FontAwesome6 name="grip-lines" size={20} color={Colors.grey} />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor: Colors.light,
+        },
+        headerShadowVisible: false,
+        drawerActiveBackgroundColor: Colors.selected,
+        drawerActiveTintColor: '#000',
+        drawerInactiveTintColor: '#000',
+        drawerItemStyle: { borderRadius: 12 },
+        drawerLabelStyle: { marginLeft: -20 },
+        overlayColor: 'rgba(0,0,0,0.2)',
+        drawerStyle: { width: dimensions.width * 0.86 },
+      }}>
       <Drawer.Screen
         name="(chat)/new"
         getId={() => Math.random().toString()}

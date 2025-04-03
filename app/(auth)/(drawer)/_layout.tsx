@@ -1,15 +1,16 @@
 // import { FontAwesome6, Ionicons } from '@expo/vector-icons';
 // import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 // import { DrawerActions } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItem,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import { useNavigation, useRouter } from 'expo-router';
+import { Link, useNavigation, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import { TextInput, Text, Image, View, StyleSheet, useWindowDimensions } from 'react-native';
+import { TextInput, Text, Image, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import NewChat from './(chat)/new';
@@ -22,7 +23,7 @@ export function CustomDrawerContent(props: any) {
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItem
-        label="New Chat"
+        label="ChatGPT"
         icon={({ color, size }) => (
           <View style={[styles.item, { backgroundColor: '#000' }]}>
             <Image source={require('~/assets/images/logo-white.png')} style={styles.btnImage} />
@@ -39,8 +40,21 @@ const Layout = () => {
     <Drawer drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen
         name="(chat)/new"
+        getId={() => Math.random().toString()}
         options={{
-          title: 'New Chat',
+          title: 'ChagGPT',
+          headerRight: () => (
+            <Link href="/(auth)/(drawer)/(chat)/new" push asChild>
+              <TouchableOpacity>
+                <Ionicons
+                  name="create-outline"
+                  size={24}
+                  color={Colors.grey}
+                  style={{ marginRight: 16 }}
+                />
+              </TouchableOpacity>
+            </Link>
+          ),
         }}
       />
     </Drawer>

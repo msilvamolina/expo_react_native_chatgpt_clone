@@ -18,7 +18,9 @@ const Page = () => {
           headerTitle: () => (
             <HeaderDropDown
               title="ChatGPT"
-              onSelect={(key) => {}}
+              onSelect={(key) => {
+                setGPTVersion(key);
+              }}
               selected={gptVersion}
               items={[
                 { key: '3.5', title: 'GPT-3.5', icon: 'bolt' },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import * as DropdownMenu from 'zeego/dropdown-menu';
-
+import Colors from '~/constants/Colors';
 export type HeaderDropDownProps = {
   title: string;
   selected?: string;
@@ -12,8 +12,14 @@ const HeaderDropDown = ({ title, selected, items, onSelect }: HeaderDropDownProp
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <View>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Text style={{ fontWeight: '500', fontSize: 16 }}>{title}</Text>
+          {selected && (
+            <Text
+              style={{ marginLeft: 10, color: Colors.greyLight, fontSize: 16, fontWeight: '500' }}>
+              {selected && <Text>{selected} &gt;</Text>}
+            </Text>
+          )}
         </View>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content>

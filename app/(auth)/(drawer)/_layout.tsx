@@ -31,7 +31,24 @@ export function CustomDrawerContent(props: any) {
         )}
         onPress={() => router.push('/(auth)/(drawer)/(chat)/new')}
       />
-      <DrawerItem label="Explorar" onPress={() => router.push('/(auth)/(drawer)/explore')} />
+      <DrawerItem
+        label="Dall-E"
+        icon={({ color, size }) => (
+          <View style={[styles.item, { backgroundColor: '#000' }]}>
+            <Image source={require('~/assets/images/dalle.png')} style={styles.dalleEImage} />
+          </View>
+        )}
+        onPress={() => router.push('/(auth)/(drawer)/dalle')}
+      />
+      <DrawerItem
+        label="Explore GPTs"
+        icon={({ color, size }) => (
+          <View style={[styles.exploreItem]}>
+            <Ionicons name="apps-outline" size={18} color="#000" s />
+          </View>
+        )}
+        onPress={() => router.push('/(auth)/(drawer)/explore')}
+      />
     </DrawerContentScrollView>
   );
 }
@@ -57,6 +74,18 @@ const Layout = () => {
           ),
         }}
       />
+      <Drawer.Screen
+        name="dalle"
+        options={{
+          title: 'Dall-E',
+        }}
+      />
+      <Drawer.Screen
+        name="explore"
+        options={{
+          title: 'Explore GPTs',
+        }}
+      />
     </Drawer>
   );
 };
@@ -70,6 +99,19 @@ const styles = StyleSheet.create({
     margin: 6,
     width: 16,
     height: 16,
+  },
+  dalleEImage: {
+    width: 28,
+    height: 28,
+    resizeMode: 'cover',
+  },
+  exploreItem: {
+    borderRadius: 15,
+    backgroundColor: '#fff',
+    width: 28,
+    height: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

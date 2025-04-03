@@ -20,6 +20,13 @@ const HeaderDropDown = ({ title, selected, items, onSelect }: HeaderDropDownProp
         {items.map((item) => (
           <DropdownMenu.Item key={item.key} onSelect={() => onSelect!(item.key)}>
             <DropdownMenu.ItemTitle>{item.title}</DropdownMenu.ItemTitle>
+            <DropdownMenu.ItemIcon
+              ios={{
+                name: item.icon as any, // required
+                pointSize: 18,
+                weight: 'semibold',
+                scale: 'medium',
+              }}></DropdownMenu.ItemIcon>
           </DropdownMenu.Item>
         ))}
       </DropdownMenu.Content>

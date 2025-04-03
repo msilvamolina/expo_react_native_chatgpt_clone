@@ -5,6 +5,13 @@ const Page = () => {
   const { signOut } = useAuth();
   return (
     <View>
+      <Text>Profile</Text>
+      <Text>Profile</Text>
+      <Text>Profile</Text>
+      <Text>Profile</Text>
+      <Text>Profile</Text>
+      <Text>Profile</Text>
+      <Text>Profile</Text>
       <Button title="Sign Out" onPress={() => signOut()} />
     </View>
   );

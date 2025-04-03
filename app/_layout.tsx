@@ -43,7 +43,7 @@ const InitialLayout = () => {
     console.log('isSignedIn', isSignedIn);
 
     if (isSignedIn && !inAuthGroup) {
-      router.replace('/(auth)');
+      router.replace('/(auth)/(drawer)/(chat)/new');
     } else if (!isSignedIn && inAuthGroup) {
       console.log('replace', 'go to home');
       router.replace('/'); // replace the current route with the root route in the grou

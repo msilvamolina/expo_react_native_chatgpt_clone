@@ -1,11 +1,13 @@
-import { ClerkProvider } from '@clerk/clerk-expo';
+import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
-import { Stack, useRouter } from 'expo-router';
+import { useFonts } from 'expo-font';
+import { Slot, SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
+import { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY! as string;
 
 const tokenCache = {
   async getToken(key: string) {
@@ -19,8 +21,38 @@ const tokenCache = {
     } catch (err) {}
   },
 };
+
+SplashScreen.preventAutoHideAsync();
+
 const InitialLayout = () => {
+  const [loaded, error] = useFonts({ SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf') });
   const router = useRouter();
+  const { isLoaded, isSignedIn } = useAuth();
+  const segments = useSegments();
+
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    const inAuthGroup = segments[0] === '(auth)';
+    console.log('inAuthGroup', inAuthGroup);
+    console.log('isSignedIn', isSignedIn);
+
+    if (isSignedIn && !inAuthGroup) {
+      router.replace('/(auth)');
+    } else if (!isSignedIn && inAuthGroup) {
+      router.replace('/'); // replace the current route with the root route in the grou
+    }
+  }, [isSignedIn]);
+
+  if (!loaded || !isLoaded) {
+    return <Slot />;
+  }
+
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />

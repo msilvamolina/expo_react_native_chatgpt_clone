@@ -27,38 +27,51 @@ import NewChat from './(chat)/new';
 import Colors from '~/constants/Colors';
 
 export function CustomDrawerContent(props: any) {
+  const { bottom, top } = useSafeAreaInsets();
   const router = useRouter();
 
   return (
-    <DrawerContentScrollView {...props}>
-      <DrawerItem
-        label="ChatGPT"
-        icon={({ color, size }) => (
-          <View style={[styles.item, { backgroundColor: '#000' }]}>
-            <Image source={require('~/assets/images/logo-white.png')} style={styles.btnImage} />
-          </View>
-        )}
-        onPress={() => router.push('/(auth)/(drawer)/(chat)/new')}
-      />
-      <DrawerItem
-        label="Dall-E"
-        icon={({ color, size }) => (
-          <View style={[styles.item, { backgroundColor: '#000' }]}>
-            <Image source={require('~/assets/images/dalle.png')} style={styles.dalleEImage} />
-          </View>
-        )}
-        onPress={() => router.push('/(auth)/(drawer)/dalle')}
-      />
-      <DrawerItem
-        label="Explore GPTs"
-        icon={({ color, size }) => (
-          <View style={[styles.exploreItem]}>
-            <Ionicons name="apps-outline" size={18} color="#000" s />
-          </View>
-        )}
-        onPress={() => router.push('/(auth)/(drawer)/explore')}
-      />
-    </DrawerContentScrollView>
+    <View style={{ flex: 1, marginTop: top }}>
+      <View style={{ backgroundColor: '#fff' }}>
+        <View style={styles.searchSection}>
+          <Ionicons style={styles.searchIcon} name="search" size={20} color={Colors.greyLight} />
+          <TextInput
+            placeholder="Search"
+            style={styles.input}
+            underlineColorAndroid="transparent"
+          />
+        </View>
+      </View>
+      <DrawerContentScrollView {...props} contentContainerStyle={{ paddingTop: 0 }}>
+        <DrawerItem
+          label="ChatGPT"
+          icon={({ color, size }) => (
+            <View style={[styles.item, { backgroundColor: '#000' }]}>
+              <Image source={require('~/assets/images/logo-white.png')} style={styles.btnImage} />
+            </View>
+          )}
+          onPress={() => router.push('/(auth)/(drawer)/(chat)/new')}
+        />
+        <DrawerItem
+          label="Dall-E"
+          icon={({ color, size }) => (
+            <View style={[styles.item, { backgroundColor: '#000' }]}>
+              <Image source={require('~/assets/images/dalle.png')} style={styles.dalleEImage} />
+            </View>
+          )}
+          onPress={() => router.push('/(auth)/(drawer)/dalle')}
+        />
+        <DrawerItem
+          label="Explore GPTs"
+          icon={({ color, size }) => (
+            <View style={[styles.exploreItem]}>
+              <Ionicons name="apps-outline" size={18} color="#000" s />
+            </View>
+          )}
+          onPress={() => router.push('/(auth)/(drawer)/explore')}
+        />
+      </DrawerContentScrollView>
+    </View>
   );
 }
 const Layout = () => {
@@ -144,6 +157,25 @@ const styles = StyleSheet.create({
     height: 28,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  searchSection: {
+    marginHorizontal: 16,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.input,
+    borderRadius: 10,
+    height: 34,
+  },
+  searchIcon: { padding: 6 },
+  input: {
+    flex: 1,
+    paddingTop: 8,
+    paddingRight: 8,
+    paddingBottom: 8,
+    paddingLeft: 0,
+    alignItems: 'center',
+    color: '#424242',
   },
 });
 

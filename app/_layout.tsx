@@ -4,7 +4,7 @@ import { useFonts } from 'expo-font';
 import { Slot, SplashScreen, Stack, useRouter, useSegments } from 'expo-router';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
+import { ActivityIndicator, TouchableOpacity, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY! as string;
@@ -45,12 +45,17 @@ const InitialLayout = () => {
     if (isSignedIn && !inAuthGroup) {
       router.replace('/(auth)');
     } else if (!isSignedIn && inAuthGroup) {
+      console.log('replace', 'go to home');
       router.replace('/'); // replace the current route with the root route in the grou
     }
   }, [isSignedIn]);
 
   if (!loaded || !isLoaded) {
-    return <Slot />;
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ActivityIndicator size="large" color="#000" />
+      </View>
+    );
   }
 
   return (
@@ -68,6 +73,7 @@ const InitialLayout = () => {
           ),
         }}
       />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
     </Stack>
   );
 };

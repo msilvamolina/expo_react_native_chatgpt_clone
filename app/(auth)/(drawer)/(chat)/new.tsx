@@ -4,13 +4,14 @@ import { useState } from 'react';
 import { View, Text, Button, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 
 import HeaderDropDown from '~/components/HeaderDropDown';
+import MessageIdeas from '~/components/MessageIdeas';
 import MessageInput from '~/components/MessageInput';
 import { defaultStyles } from '~/constants/Styles';
 
 const Page = () => {
   const { signOut } = useAuth();
-
   const [gptVersion, setGPTVersion] = useState('3.5');
+  const [messages, setMessages] = useState([]);
 
   const getCompletion = async (message: string) => {
     console.log('Getting completion for:', message);
@@ -52,6 +53,7 @@ const Page = () => {
           width: '100%',
         }}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        {messages.length === 0 && <MessageIdeas onSelectCard={getCompletion} />}
         <MessageInput onShouldSendMessage={getCompletion} />
       </KeyboardAvoidingView>
     </View>

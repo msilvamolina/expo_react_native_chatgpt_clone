@@ -17,11 +17,15 @@ const Layout = () => {
           headerShadowVisible: false,
           headerStyle: { backgroundColor: Colors.selected },
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={{ backgroundColor: Colors.greyLight, borderRadius: 20, padding: 6 }}>
-              <Ionicons name="close-outline" size={16} color={Colors.grey} />
-            </TouchableOpacity>
+            <>
+              {router.canGoBack() && (
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  style={{ backgroundColor: Colors.greyLight, borderRadius: 20, padding: 6 }}>
+                  <Ionicons name="close-outline" size={16} color={Colors.grey} />
+                </TouchableOpacity>
+              )}
+            </>
           ),
         }}
       />

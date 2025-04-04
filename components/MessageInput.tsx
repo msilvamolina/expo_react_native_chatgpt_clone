@@ -63,7 +63,7 @@ const MessageInput = ({ onShouldSendMessage }: MessageInputProps) => {
   });
 
   return (
-    <BlurView tint="extraLight" intensity={30} style={{ paddingBottom: bottom, paddingTop: 10 }}>
+    <BlurView tint="extraLight" intensity={90} style={{ paddingBottom: bottom, paddingTop: 10 }}>
       <View style={styles.row}>
         <ATouchableOpacity style={[styles.roundBtn, expandButtonStyle]} onPress={expandItems}>
           <Ionicons name="add" size={24} color={Colors.grey} />

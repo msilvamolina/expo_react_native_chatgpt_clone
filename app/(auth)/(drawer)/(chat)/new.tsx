@@ -1,4 +1,5 @@
 import { useAuth } from '@clerk/clerk-react';
+import { FlashList } from '@shopify/flash-list';
 import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
@@ -12,6 +13,7 @@ import {
   Keyboard,
 } from 'react-native';
 
+import ChatMessage from '~/components/ChatMessage';
 import HeaderDropDown from '~/components/HeaderDropDown';
 import MessageIdeas from '~/components/MessageIdeas';
 import MessageInput from '~/components/MessageInput';
@@ -21,18 +23,109 @@ import { Message, Role } from '~/utils/interfaces';
 
 const DUMMY_MESSAGES: Message[] = [
   {
-    content: 'Hello, how are you?',
+    content: 'Hello, how can I help you today?',
     role: Role.Bot,
   },
   {
-    content: 'I need help with muy React Native app',
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
+    role: Role.User,
+  },
+  {
+    content: 'Hello, how can I help you today?',
+    role: Role.Bot,
+  },
+  {
+    content:
+      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
     role: Role.User,
   },
 ];
 const Page = () => {
   const { signOut } = useAuth();
   const [gptVersion, setGPTVersion] = useState('3.5');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(DUMMY_MESSAGES);
   const [height, setHeight] = useState(0);
 
   const getCompletion = async (message: string) => {
@@ -71,6 +164,16 @@ const Page = () => {
             {/* <Text style={{ fontSize: 20, fontWeight: 'bold', color: Colors.grey }}>ChatGPT</Text> */}
           </View>
         )}
+        <FlashList
+          data={messages}
+          renderItem={({ item }) => <ChatMessage {...item} />}
+          estimatedItemSize={400}
+          contentContainerStyle={{
+            paddingBottom: 150,
+            paddingTop: 30,
+          }}
+          keyboardDismissMode="on-drag"
+        />
       </View>
       <KeyboardAvoidingView
         keyboardVerticalOffset={70}

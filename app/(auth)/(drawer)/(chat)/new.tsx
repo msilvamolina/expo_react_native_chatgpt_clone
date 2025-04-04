@@ -12,7 +12,9 @@ const Page = () => {
 
   const [gptVersion, setGPTVersion] = useState('3.5');
 
-  const getCompletion = async (message: string) => {};
+  const getCompletion = async (message: string) => {
+    console.log('Getting completion for:', message);
+  };
   return (
     <View style={defaultStyles.pageContainer}>
       <Stack.Screen

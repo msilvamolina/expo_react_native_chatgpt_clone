@@ -7,12 +7,22 @@ import HeaderDropDown from '~/components/HeaderDropDown';
 import MessageIdeas from '~/components/MessageIdeas';
 import MessageInput from '~/components/MessageInput';
 import { defaultStyles } from '~/constants/Styles';
-import { Message } from '~/utils/interfaces';
+import { Message, Role } from '~/utils/interfaces';
 
+const DUMMY_MESSAGES: Message[] = [
+  {
+    content: 'Hello, how are you?',
+    role: Role.Bot,
+  },
+  {
+    content: 'I need help with muy React Native app',
+    role: Role.User,
+  },
+];
 const Page = () => {
   const { signOut } = useAuth();
   const [gptVersion, setGPTVersion] = useState('3.5');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(DUMMY_MESSAGES);
 
   const getCompletion = async (message: string) => {
     console.log('Getting completion for:', message);
@@ -37,7 +47,7 @@ const Page = () => {
         }}
       />
       <View style={{ flex: 1 }}>
-        <Button title="Sign Out" onPress={() => signOut()} />
+        <Text>Hola</Text>
       </View>
       <KeyboardAvoidingView
         keyboardVerticalOffset={70}

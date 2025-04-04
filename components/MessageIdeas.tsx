@@ -1,5 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+
+import Colors from '~/constants/Colors';
 const PredefinedMessages = [
   { title: 'Explain React Native', text: "like I'm five years old" },
   { title: 'Suggest fun activites', text: 'for a family visiting San Francisco' },
@@ -13,10 +16,33 @@ type Props = {
 const MessageIdeas = ({ onSelectCard }: Props) => {
   return (
     <View>
-      <Text>MessageIdeas</Text>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 20,
+          gap: 16,
+          paddingVertical: 10,
+        }}>
+        {PredefinedMessages.map((message, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.card}
+            onPress={() => onSelectCard(`${message.title} ${message.text}`)}>
+            <Text>{message.title}</Text>
+            <Text>{message.text}</Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  card: {
+    backgroundColor: Colors.input,
+    padding: 14,
+    borderRadius: 10,
+  },
+});
 export default MessageIdeas;

@@ -7,11 +7,12 @@ import HeaderDropDown from '~/components/HeaderDropDown';
 import MessageIdeas from '~/components/MessageIdeas';
 import MessageInput from '~/components/MessageInput';
 import { defaultStyles } from '~/constants/Styles';
+import { Message } from '~/utils/interfaces';
 
 const Page = () => {
   const { signOut } = useAuth();
   const [gptVersion, setGPTVersion] = useState('3.5');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const getCompletion = async (message: string) => {
     console.log('Getting completion for:', message);
@@ -36,13 +37,7 @@ const Page = () => {
         }}
       />
       <View style={{ flex: 1 }}>
-        <Text>DUMMY CONTENT</Text>
         <Button title="Sign Out" onPress={() => signOut()} />
-        {/* <ScrollView>
-          {Array.from({ length: 100 }).map((_, index) => (
-            <Text key={index}>{index}</Text>
-          ))}
-        </ScrollView> */}
       </View>
       <KeyboardAvoidingView
         keyboardVerticalOffset={70}

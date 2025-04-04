@@ -1,11 +1,21 @@
 import { useAuth } from '@clerk/clerk-react';
 import { Stack } from 'expo-router';
-import { useState } from 'react';
-import { View, Text, Button, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Keyboard,
+} from 'react-native';
 
 import HeaderDropDown from '~/components/HeaderDropDown';
 import MessageIdeas from '~/components/MessageIdeas';
 import MessageInput from '~/components/MessageInput';
+import Colors from '~/constants/Colors';
 import { defaultStyles } from '~/constants/Styles';
 import { Message, Role } from '~/utils/interfaces';
 
@@ -22,11 +32,19 @@ const DUMMY_MESSAGES: Message[] = [
 const Page = () => {
   const { signOut } = useAuth();
   const [gptVersion, setGPTVersion] = useState('3.5');
-  const [messages, setMessages] = useState<Message[]>(DUMMY_MESSAGES);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [height, setHeight] = useState(0);
 
   const getCompletion = async (message: string) => {
     console.log('Getting completion for:', message);
   };
+
+  const onLayout = (event: any) => {
+    const { height } = event.nativeEvent.layout;
+    console.log('Height:', height);
+    setHeight(height);
+  };
+
   return (
     <View style={defaultStyles.pageContainer}>
       <Stack.Screen
@@ -46,8 +64,13 @@ const Page = () => {
           ),
         }}
       />
-      <View style={{ flex: 1 }}>
-        <Text>Hola</Text>
+      <View style={{ flex: 1 }} onLayout={onLayout}>
+        {messages.length === 0 && (
+          <View style={[styles.logoContainer, { marginTop: height / 2 - 100 }]}>
+            <Image source={require('~/assets/images/logo-white.png')} style={styles.image} />
+            {/* <Text style={{ fontSize: 20, fontWeight: 'bold', color: Colors.grey }}>ChatGPT</Text> */}
+          </View>
+        )}
       </View>
       <KeyboardAvoidingView
         keyboardVerticalOffset={70}
@@ -64,5 +87,22 @@ const Page = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  logoContainer: {
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 50,
+    height: 50,
+    backgroundColor: '#000',
+    borderRadius: 50,
+  },
+  image: {
+    width: 30,
+    height: 30,
+    resizeMode: 'cover',
+  },
+});
 
 export default Page;

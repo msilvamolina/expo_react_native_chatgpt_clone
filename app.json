@@ -19,6 +19,14 @@
       ],
       "expo-secure-store",
       "expo-build-properties"
+      // [
+      //   "expo-media-library",
+      //   {
+      //     "photosPermission": "The app accesses your photos to let you share them with your friends.",
+      //     "savePhotosPermission": "The app accesses your photos to let you save them to your library.",
+      //     "isAccessMediaLibraryEnabled": true
+      //   }
+      // ]
     ],
     "experiments": {
       "typedRoutes": true,
@@ -32,9 +40,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.waviproject.wavichatai",

@@ -1,6 +1,6 @@
 import { useAuth } from '@clerk/clerk-react';
 import { FlashList } from '@shopify/flash-list';
-import { Stack } from 'expo-router';
+import { Redirect, Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import {
   View,
@@ -12,6 +12,7 @@ import {
   ScrollView,
   Keyboard,
 } from 'react-native';
+import { useMMKVString } from 'react-native-mmkv';
 
 import ChatMessage from '~/components/ChatMessage';
 import HeaderDropDown from '~/components/HeaderDropDown';
@@ -19,6 +20,7 @@ import MessageIdeas from '~/components/MessageIdeas';
 import MessageInput from '~/components/MessageInput';
 import Colors from '~/constants/Colors';
 import { defaultStyles } from '~/constants/Styles';
+import { Storage } from '~/utils/Storage';
 import { Message, Role } from '~/utils/interfaces';
 
 const DUMMY_MESSAGES: Message[] = [
@@ -31,102 +33,18 @@ const DUMMY_MESSAGES: Message[] = [
       'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
     role: Role.User,
   },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
 ];
 const Page = () => {
-  const { signOut } = useAuth();
-  const [gptVersion, setGPTVersion] = useState('3.5');
   const [messages, setMessages] = useState<Message[]>(DUMMY_MESSAGES);
   const [height, setHeight] = useState(0);
+
+  const [key, setKey] = useMMKVString('apiKey', Storage);
+  const [organization, setOrganization] = useMMKVString('org', Storage);
+  const [gptVersion, setGPTVersion] = useMMKVString('gptVersion', Storage);
+
+  if (!key || key === '' || !organization || organization === '') {
+    return <Redirect href="/(auth)/(modal)/settings" />;
+  }
 
   const getCompletion = async (message: string) => {
     console.log('Getting completion for:', message);

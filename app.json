@@ -18,15 +18,15 @@
         }
       ],
       "expo-secure-store",
-      "expo-build-properties"
-      // [
-      //   "expo-media-library",
-      //   {
-      //     "photosPermission": "The app accesses your photos to let you share them with your friends.",
-      //     "savePhotosPermission": "The app accesses your photos to let you save them to your library.",
-      //     "isAccessMediaLibraryEnabled": true
-      //   }
-      // ]
+      "expo-build-properties",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos on your device.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos on your device.",
+          "isAccessMediaLibraryEnabled": true
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

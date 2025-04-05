@@ -1,7 +1,7 @@
 import { useAuth } from '@clerk/clerk-react';
 import { FlashList } from '@shopify/flash-list';
 import { Redirect, Stack } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   View,
   Text,
@@ -13,6 +13,7 @@ import {
   Keyboard,
 } from 'react-native';
 import { useMMKVString } from 'react-native-mmkv';
+import OpenAI from 'react-native-openai';
 
 import ChatMessage from '~/components/ChatMessage';
 import HeaderDropDown from '~/components/HeaderDropDown';
@@ -35,7 +36,7 @@ const DUMMY_MESSAGES: Message[] = [
   },
 ];
 const Page = () => {
-  const [messages, setMessages] = useState<Message[]>(DUMMY_MESSAGES);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [height, setHeight] = useState(0);
 
   const [key, setKey] = useMMKVString('apiKey', Storage);
@@ -46,8 +47,32 @@ const Page = () => {
     return <Redirect href="/(auth)/(modal)/settings" />;
   }
 
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const openAi = useMemo(() => new OpenAI({ apiKey: key, organization }), []);
+
   const getCompletion = async (message: string) => {
     console.log('Getting completion for:', message);
+    if (message.length === 0) {
+    }
+
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        content: message,
+        role: Role.User,
+      },
+      { role: Role.Bot, content: '' },
+    ]);
+
+    openAi.chat.stream({
+      messages: [
+        {
+          role: 'user',
+          content: message,
+        },
+      ],
+      model: gptVersion === '4' ? 'gpt-4' : 'gpt-3.5-turbo',
+    });
   };
 
   const onLayout = (event: any) => {
@@ -55,6 +80,32 @@ const Page = () => {
     console.log('Height:', height);
     setHeight(height);
   };
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const handleMessage = (payload: any) => {
+      console.log('Received message:', payload);
+      setMessages((messages) => {
+        const newMessage = payload.choices[0].delta.content;
+
+        if (newMessage) {
+          messages[messages.length - 1].content += newMessage;
+          return [...messages];
+        }
+
+        if (payload.choices[0]?.finishReason) {
+          console.log('Stream ended');
+        }
+        return messages;
+      });
+    };
+
+    openAi.chat.addListener('onChatMessageReceived', handleMessage);
+
+    return () => {
+      openAi.chat.removeListener('onChatMessageReceived');
+    };
+  }, [openAi]);
 
   return (
     <View style={defaultStyles.pageContainer}>

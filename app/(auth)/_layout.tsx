@@ -22,7 +22,28 @@ const Layout = () => {
                 <TouchableOpacity
                   onPress={() => router.back()}
                   style={{ backgroundColor: Colors.greyLight, borderRadius: 20, padding: 6 }}>
-                  <Ionicons name="close-outline" size={16} color={Colors.grey} />
+                  <Ionicons name="close-outline" size={16} color="#fff" />
+                </TouchableOpacity>
+              )}
+            </>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="(modal)/[url]"
+        options={{
+          headerTitle: '',
+          presentation: 'fullScreenModal',
+          headerShadowVisible: false,
+          headerBlurEffect: 'dark',
+          headerStyle: { backgroundColor: 'rgba(0,0,0,0.4)' },
+          headerLeft: () => (
+            <>
+              {router.canGoBack() && (
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  style={{ borderRadius: 20, padding: 6 }}>
+                  <Ionicons name="close-outline" size={16} color="#fff" />
                 </TouchableOpacity>
               )}
             </>

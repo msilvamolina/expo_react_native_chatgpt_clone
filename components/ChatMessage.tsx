@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, ActivityIndicator, Pressable } from 'rea
 import * as ContextMenu from 'zeego/context-menu';
 
 import Colors from '~/constants/Colors';
+import { copyImageToClipboard, downloadAndSaveImage, shareImage } from '~/utils/Image';
 import { Message, Role } from '~/utils/interfaces';
 
 const ChatMessage = ({
@@ -13,13 +14,13 @@ const ChatMessage = ({
   loading,
 }: Message & { loading?: boolean }) => {
   const contextItems = [
-    { title: 'Copy', systemIcon: 'doc.on.doc', action: () => console.log('Copy') },
+    { title: 'Copy', systemIcon: 'doc.on.doc', action: () => copyImageToClipboard(imageUrl!) },
     {
       title: 'Save to Photos',
       systemIcon: 'arrow.down.to.line',
-      action: () => console.log('Save'),
+      action: () => downloadAndSaveImage(imageUrl!),
     },
-    { title: 'Share', systemIcon: 'square.and.arrow.up', action: () => console.log('Share') },
+    { title: 'Share', systemIcon: 'square.and.arrow.up', action: () => shareImage(imageUrl!) },
   ];
   return (
     <View style={styles.row}>

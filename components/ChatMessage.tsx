@@ -1,3 +1,4 @@
+import { Link } from 'expo-router';
 import React from 'react';
 import { View, Text, StyleSheet, Image, ActivityIndicator, Pressable } from 'react-native';
 import * as ContextMenu from 'zeego/context-menu';
@@ -40,9 +41,13 @@ const ChatMessage = ({
           {content === '' && imageUrl ? (
             <ContextMenu.Root>
               <ContextMenu.Trigger>
-                <Pressable>
-                  <Image source={{ uri: imageUrl }} style={styles.previewImage} />
-                </Pressable>
+                <Link
+                  href={`/(auth)/(modal)/${encodeURIComponent(imageUrl)}?prompt=${encodeURIComponent(prompt!)}`}
+                  asChild>
+                  <Pressable>
+                    <Image source={{ uri: imageUrl }} style={styles.previewImage} />
+                  </Pressable>
+                </Link>
               </ContextMenu.Trigger>
               <ContextMenu.Content>
                 {contextItems.map((item, index) => (

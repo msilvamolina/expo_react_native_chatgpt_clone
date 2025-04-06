@@ -1,11 +1,12 @@
 import { Ionicons, Octicons } from '@expo/vector-icons';
 import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 import { BlurView } from 'expo-blur';
-import { useLocalSearchParams } from 'expo-router';
+import { Stack, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import DropDownMenu from '~/components/DropDownMenu';
 import Colors from '~/constants/Colors';
 import { downloadAndSaveImage, shareImage } from '~/utils/Image';
 const Page = () => {
@@ -16,8 +17,23 @@ const Page = () => {
     console.log('Copy prompt');
   };
 
+  const handlePresentModalPres = () => {};
+
   return (
     <View style={styles.container}>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <DropDownMenu
+              items={[
+                { key: '1', title: 'View prompt', icon: 'info.circle' },
+                { key: '2', title: 'Learn more', icon: 'questionmark.circle' },
+              ]}
+              onSelect={handlePresentModalPres}
+            />
+          ),
+        }}
+      />
       <ImageZoom
         uri={url}
         style={styles.image}

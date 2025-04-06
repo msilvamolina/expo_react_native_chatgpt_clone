@@ -13,7 +13,16 @@ const Page = () => {
 
   return (
     <View style={styles.container}>
-      <ImageZoom uri={url} style={styles.image} />
+      <ImageZoom
+        uri={url}
+        style={styles.image}
+        minScale={0.5}
+        maxScale={5}
+        doubleTapScale={2}
+        isSingleTapEnabled
+        isDoubleTapEnabled
+        resizeMode="contain"
+      />
     </View>
   );
 };

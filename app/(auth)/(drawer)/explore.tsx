@@ -4,7 +4,7 @@ import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import Drawer from 'expo-router/drawer';
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import Animated, {
   FadeIn,
   FadeOut, // o FadeIn si querés usar el mismo para entrar y salir
@@ -130,8 +130,8 @@ const Explore = () => {
           <React.Fragment key={index}>
             {selected === section && (
               <Animated.View
-                entering={FadeIn.duration(600).delay(400)}
-                exiting={FadeOut.duration(400)}
+                entering={FadeIn.duration(400).delay(300)}
+                exiting={FadeOut.duration(300)}
                 style={styles.section}>
                 <ShimmerPlaceholder width={160} height={20} visible={!loading}>
                   <Text style={styles.title}>{selected.title}</Text>
@@ -143,6 +143,31 @@ const Explore = () => {
                   shimmerStyle={{ marginVertical: 10 }}>
                   <Text style={styles.label}>{section.label}</Text>
                 </ShimmerPlaceholder>
+
+                {apps.map((app, index) => (
+                  <View key={index} style={styles.card}>
+                    <ShimmerPlaceholder
+                      width={60}
+                      height={60}
+                      visible={!loading}
+                      shimmerStyle={{ borderRadius: 30 }}>
+                      <Image source={{ uri: app.image }} style={styles.cardImage} />
+                    </ShimmerPlaceholder>
+                    <View style={{ flexShrink: 1, gap: 4 }}>
+                      <ShimmerPlaceholder width={160} height={20} visible={!loading}>
+                        <Text style={styles.cardTitle}>{app.title}</Text>
+                      </ShimmerPlaceholder>
+
+                      <ShimmerPlaceholder width={160} height={20} visible={!loading}>
+                        <Text style={styles.cardDesc}>{app.description}</Text>
+                      </ShimmerPlaceholder>
+
+                      <ShimmerPlaceholder width={250} height={20} visible={!loading}>
+                        <Text style={styles.cardAuthor}>{app.author}</Text>
+                      </ShimmerPlaceholder>
+                    </View>
+                  </View>
+                ))}
               </Animated.View>
             )}
           </React.Fragment>

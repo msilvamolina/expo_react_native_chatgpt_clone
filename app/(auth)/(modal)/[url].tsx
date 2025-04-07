@@ -1,9 +1,17 @@
 import { Ionicons, Octicons } from '@expo/vector-icons';
+import {
+  BottomSheetModal,
+  BottomSheetModalProvider,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 import { BlurView } from 'expo-blur';
+import * as Clipboard from 'expo-clipboard';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import React from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { RootSiblingParent } from 'react-native-root-siblings';
+import Toast from 'react-native-root-toast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import DropDownMenu from '~/components/DropDownMenu';
@@ -13,60 +21,90 @@ const Page = () => {
   const { url, prompt } = useLocalSearchParams<{ url: string; prompt?: string }>();
   const { bottom } = useSafeAreaInsets();
 
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const snapPoints = useMemo(() => ['40%'], []);
+
+  const handlePresentModalPres = useCallback(() => {
+    bottomSheetModalRef.current?.present();
+  }, []);
+
+  const handleCloseModalPress = useCallback(() => {
+    bottomSheetModalRef.current?.dismiss();
+  }, []);
+
   const onCopyPrompt = () => {
     console.log('Copy prompt');
+    Clipboard.setStringAsync(prompt!);
+    Toast.show('Prompt copied to clipboard', {
+      duration: Toast.durations.SHORT,
+      position: Toast.positions.TOP,
+      shadow: true,
+      animation: true,
+      hideOnPress: true,
+      delay: 0,
+    });
   };
 
-  const handlePresentModalPres = () => {};
-
   return (
-    <View style={styles.container}>
-      <Stack.Screen
-        options={{
-          headerRight: () => (
-            <DropDownMenu
-              items={[
-                { key: '1', title: 'View prompt', icon: 'info.circle' },
-                { key: '2', title: 'Learn more', icon: 'questionmark.circle' },
-              ]}
-              onSelect={handlePresentModalPres}
-            />
-          ),
-        }}
-      />
-      <ImageZoom
-        uri={url}
-        style={styles.image}
-        minScale={0.5}
-        maxScale={5}
-        doubleTapScale={2}
-        isSingleTapEnabled
-        isDoubleTapEnabled
-        resizeMode="contain"
-      />
-      <BlurView intensity={95} tint="dark" style={[styles.blurview, { paddingBottom: bottom }]}>
-        <View style={styles.row}>
-          <TouchableOpacity style={{ alignItems: 'center' }}>
-            <Ionicons name="chatbubble-ellipses-outline" size={24} color="white" />
-            <Text style={styles.btnText}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ alignItems: 'center' }}>
-            <Ionicons name="brush-outline" size={24} color="white" />
-            <Text style={styles.btnText}>Select</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ alignItems: 'center' }}
-            onPress={() => downloadAndSaveImage(url)}>
-            <Octicons name="download" size={24} color="white" />
-            <Text style={styles.btnText}>Save</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => shareImage(url)}>
-            <Octicons name="share" size={24} color="white" />
-            <Text style={styles.btnText}>Share</Text>
-          </TouchableOpacity>
+    <RootSiblingParent>
+      <BottomSheetModalProvider>
+        <View style={styles.container}>
+          <Stack.Screen
+            options={{
+              headerRight: () => (
+                <DropDownMenu
+                  items={[
+                    { key: '1', title: 'View prompt', icon: 'info.circle' },
+                    { key: '2', title: 'Learn more', icon: 'questionmark.circle' },
+                  ]}
+                  onSelect={handlePresentModalPres}
+                />
+              ),
+            }}
+          />
+          <ImageZoom
+            uri={url}
+            style={styles.image}
+            minScale={0.5}
+            maxScale={5}
+            doubleTapScale={2}
+            isSingleTapEnabled
+            isDoubleTapEnabled
+            resizeMode="contain"
+          />
+          <BlurView intensity={95} tint="dark" style={[styles.blurview, { paddingBottom: bottom }]}>
+            <View style={styles.row}>
+              <TouchableOpacity style={{ alignItems: 'center' }}>
+                <Ionicons name="chatbubble-ellipses-outline" size={24} color="white" />
+                <Text style={styles.btnText}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ alignItems: 'center' }}>
+                <Ionicons name="brush-outline" size={24} color="white" />
+                <Text style={styles.btnText}>Select</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{ alignItems: 'center' }}
+                onPress={() => downloadAndSaveImage(url)}>
+                <Octicons name="download" size={24} color="white" />
+                <Text style={styles.btnText}>Save</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => shareImage(url)}>
+                <Octicons name="share" size={24} color="white" />
+                <Text style={styles.btnText}>Share</Text>
+              </TouchableOpacity>
+            </View>
+          </BlurView>
         </View>
-      </BlurView>
-    </View>
+        <BottomSheetModal
+          backgroundStyle={{ backgroundColor: Colors.grey }}
+          handleIndicatorStyle={{ backgroundColor: Colors.greyLight }}
+          ref={bottomSheetModalRef}
+          index={0}
+          snapPoints={snapPoints}>
+          <Text>TEST</Text>
+        </BottomSheetModal>
+      </BottomSheetModalProvider>
+    </RootSiblingParent>
   );
 };
 

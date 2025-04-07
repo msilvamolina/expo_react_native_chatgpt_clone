@@ -8,23 +8,24 @@ import { ImageZoom } from '@likashefqet/react-native-image-zoom';
 import { BlurView } from 'expo-blur';
 import * as Clipboard from 'expo-clipboard';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import React, { useCallback, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useCallback, useMemo, useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import Toast from 'react-native-root-toast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import DropDownMenu from '~/components/DropDownMenu';
 import Colors from '~/constants/Colors';
+import { defaultStyles } from '~/constants/Styles';
 import { downloadAndSaveImage, shareImage } from '~/utils/Image';
+
 const Page = () => {
   const { url, prompt } = useLocalSearchParams<{ url: string; prompt?: string }>();
   const { bottom } = useSafeAreaInsets();
 
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['40%'], []);
-
-  const handlePresentModalPres = useCallback(() => {
+  const handlePresentModalPress = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
 
@@ -33,11 +34,11 @@ const Page = () => {
   }, []);
 
   const onCopyPrompt = () => {
-    console.log('Copy prompt');
     Clipboard.setStringAsync(prompt!);
+
     Toast.show('Prompt copied to clipboard', {
       duration: Toast.durations.SHORT,
-      position: Toast.positions.TOP,
+      position: Toast.positions.BOTTOM,
       shadow: true,
       animation: true,
       hideOnPress: true,
@@ -57,21 +58,22 @@ const Page = () => {
                     { key: '1', title: 'View prompt', icon: 'info.circle' },
                     { key: '2', title: 'Learn more', icon: 'questionmark.circle' },
                   ]}
-                  onSelect={handlePresentModalPres}
+                  onSelect={handlePresentModalPress}
                 />
               ),
             }}
           />
           <ImageZoom
             uri={url}
-            style={styles.image}
             minScale={0.5}
             maxScale={5}
             doubleTapScale={2}
             isSingleTapEnabled
             isDoubleTapEnabled
+            style={styles.image}
             resizeMode="contain"
           />
+
           <BlurView intensity={95} tint="dark" style={[styles.blurview, { paddingBottom: bottom }]}>
             <View style={styles.row}>
               <TouchableOpacity style={{ alignItems: 'center' }}>
@@ -95,13 +97,31 @@ const Page = () => {
             </View>
           </BlurView>
         </View>
+
         <BottomSheetModal
-          backgroundStyle={{ backgroundColor: Colors.grey }}
-          handleIndicatorStyle={{ backgroundColor: Colors.greyLight }}
           ref={bottomSheetModalRef}
           index={0}
-          snapPoints={snapPoints}>
-          <Text>TEST</Text>
+          snapPoints={snapPoints}
+          backgroundStyle={{ backgroundColor: Colors.grey }}
+          handleIndicatorStyle={{ backgroundColor: Colors.greyLight }}>
+          <View style={[styles.modalContainer, { paddingBottom: bottom, flex: 1 }]}>
+            <BottomSheetScrollView>
+              <View style={{ flex: 1 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <Text style={styles.titleText}>Prompt</Text>
+                  <Pressable onPress={handleCloseModalPress} style={styles.closeBtn}>
+                    <Ionicons name="close-outline" size={24} color={Colors.greyLight} />
+                  </Pressable>
+                </View>
+                <Text style={styles.promptText}>{prompt}</Text>
+              </View>
+            </BottomSheetScrollView>
+            <TouchableOpacity
+              style={[defaultStyles.btn, { backgroundColor: '#fff', marginTop: 16 }]}
+              onPress={onCopyPrompt}>
+              <Text style={styles.buttonText}>Copy</Text>
+            </TouchableOpacity>
+          </View>
         </BottomSheetModal>
       </BottomSheetModalProvider>
     </RootSiblingParent>
@@ -165,5 +185,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
 export default Page;

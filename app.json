@@ -26,7 +26,8 @@
           "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos on your device.",
           "isAccessMediaLibraryEnabled": true
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,
@@ -40,7 +41,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.waviproject.wavichatai",

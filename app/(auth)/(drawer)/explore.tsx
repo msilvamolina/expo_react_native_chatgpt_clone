@@ -1,10 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Header, getHeaderTitle, useHeaderHeight } from '@react-navigation/elements';
 import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
 import Drawer from 'expo-router/drawer';
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { LinearGradient } from 'react-native-linear-gradient';
 import Animated, {
   FadeIn,
   FadeOut, // o FadeIn si querés usar el mismo para entrar y salir
@@ -133,8 +133,16 @@ const Explore = () => {
                 entering={FadeIn.duration(600).delay(400)}
                 exiting={FadeOut.duration(400)}
                 style={styles.section}>
-                <Text style={styles.title}>{section.title}</Text>
-                <Text style={styles.label}>{section.label}</Text>
+                <ShimmerPlaceholder width={160} height={20} visible={!loading}>
+                  <Text style={styles.title}>{selected.title}</Text>
+                </ShimmerPlaceholder>
+                <ShimmerPlaceholder
+                  width={280}
+                  height={20}
+                  visible={!loading}
+                  shimmerStyle={{ marginVertical: 10 }}>
+                  <Text style={styles.label}>{section.label}</Text>
+                </ShimmerPlaceholder>
               </Animated.View>
             )}
           </React.Fragment>

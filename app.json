@@ -1,41 +1,74 @@
 {
   "expo": {
-    "name": "chatgpt@latest",
-    "slug": "chatgpt@latest",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "name": "wavichatai",
+    "slug": "wavichatai",
+    "version": "1.0.2",
+    "scheme": "wavichatai",
     "ios": {
-      "supportsTablet": true
+      "buildNumber": "3",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.waviproject.wavichatai",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "entitlements": {
+        "aps-environment": "production"
+      }
     },
     "android": {
+      "versionCode": 3,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.waviproject.wavichatai"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/favicon.png"
     },
     "plugins": [
       "expo-router",
       [
-        "expo-splash-screen",
+        "expo-dev-launcher",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "launchMode": "most-recent"
         }
-      ]
+      ],
+      "expo-secure-store",
+      "expo-build-properties",
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos on your device.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos on your device.",
+          "isAccessMediaLibraryEnabled": true
+        }
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "tsconfigPaths": true
+    },
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "ecf87cba-fa63-42c8-9fd5-7403e7556580"
+      }
     }
   }
 }

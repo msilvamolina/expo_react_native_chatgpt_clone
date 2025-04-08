@@ -12,10 +12,21 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "developmentClient": false,
+      "distribution": "store"
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "releaseStatus": "draft",
+        "serviceAccountKeyPath": "./google-service-account.json"
+      },
+      "ios": {
+        "appleId": "waviapp@gmail.com",
+        "ascAppId": "6743953760"
+      }
+    }
   }
 }

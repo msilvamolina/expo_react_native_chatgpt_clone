@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
+    "ios:build:prod": "rm -f builds/app-prod.ipa && eas build --platform ios --local --clear-cache --profile production --non-interactive  --output ./builds/app-prod.ipa",
+    "ios:submit:prod": "eas submit --platform ios --profile production --non-interactive --path ./builds/app-prod.ipa",
+    "ios:prebuild:prod": "rm -rf ios && npx expo prebuild --clean --platform ios --non-interactive",
     "start": "expo start --dev-client",
     "ios": "expo run:ios",
     "android": "expo run:android",
@@ -33,11 +36,13 @@
     "expo-document-picker": "~13.0.3",
     "expo-file-system": "~18.0.12",
     "expo-image-picker": "~16.0.6",
+    "expo-linear-gradient": "~14.0.2",
     "expo-linking": "~7.0.5",
     "expo-media-library": "~17.0.6",
     "expo-router": "~4.0.6",
     "expo-secure-store": "~14.0.1",
     "expo-sharing": "~13.0.1",
+    "expo-sqlite": "~15.1.4",
     "expo-status-bar": "~2.0.1",
     "expo-system-ui": "~4.0.9",
     "expo-web-browser": "~14.0.2",
@@ -49,6 +54,7 @@
     "react-native-ios-utilities": "^5.1.2",
     "react-native-mmkv": "2.12.2",
     "react-native-openai": "^0.6.2",
+    "react-native-purchase": "^0.0.1",
     "react-native-reanimated": "~3.16.1",
     "react-native-redash": "^18.1.3",
     "react-native-root-siblings": "^4.1.1",
@@ -57,9 +63,7 @@
     "react-native-screens": "~4.4.0",
     "react-native-shimmer-placeholder": "^2.0.9",
     "react-native-web": "~0.19.10",
-    "zeego": "^3.0.6",
-    "expo-linear-gradient": "~14.0.2",
-    "expo-sqlite": "~15.1.4"
+    "zeego": "^3.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

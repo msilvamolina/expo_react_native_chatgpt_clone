@@ -2,8 +2,24 @@
   "expo": {
     "name": "wavichatai",
     "slug": "wavichatai",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "scheme": "wavichatai",
+    "ios": {
+      "buildNumber": "2",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.waviproject.wavichatai",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "versionCode": 2,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.waviproject.wavichatai"
+    },
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -41,23 +57,8 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.waviproject.wavichatai",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "com.waviproject.wavichatai"
-    },
+    "assetBundlePatterns": ["**/*"],
+
     "extra": {
       "router": {
         "origin": false

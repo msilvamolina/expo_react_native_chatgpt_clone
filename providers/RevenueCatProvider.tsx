@@ -33,11 +33,11 @@ export const RevenueCatProvider = ({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const init = async () => {
       if (Platform.OS === 'ios') {
-        await Purchases.configure({
+        Purchases.configure({
           apiKey: APIKeys.apple,
         });
       } else {
-        await Purchases.configure({
+        Purchases.configure({
           apiKey: APIKeys.google,
         });
       }
@@ -66,7 +66,7 @@ export const RevenueCatProvider = ({ children }: { children: React.ReactNode }) 
     const newUser: UserState = {
       dalle: user.dalle,
     };
-    if (customerInfo.entitlements.active['dalle']) {
+    if (customerInfo.entitlements.active['DALLE'] !== undefined) {
       newUser.dalle = true;
     }
     setUser(newUser);

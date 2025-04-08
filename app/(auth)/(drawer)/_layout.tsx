@@ -126,6 +126,21 @@ export function CustomDrawerContent(props: any) {
               />
             </ContextMenu.Trigger>
             <ContextMenu.Content>
+              <ContextMenu.Preview>
+                {() => (
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 16,
+                      height: 200,
+                      width: 250,
+                      backgroundColor: '#fff',
+                    }}>
+                    <Text>{chat.title}</Text>
+                  </View>
+                )}
+              </ContextMenu.Preview>
               <ContextMenu.Item key="rename" onSelect={() => onRenameChat(chat.id)}>
                 <ContextMenu.ItemTitle>Rename</ContextMenu.ItemTitle>
                 <ContextMenu.ItemIcon ios={{ name: 'pencil', pointSize: 18 }} />

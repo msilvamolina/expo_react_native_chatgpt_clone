@@ -14,6 +14,8 @@ const ChatMessage = ({
   prompt,
   loading,
 }: Message & { loading?: boolean }) => {
+  const isUser = role === Role.User;
+
   const contextItems = [
     { title: 'Copy', systemIcon: 'doc.on.doc', action: () => copyImageToClipboard(imageUrl!) },
     {
@@ -23,21 +25,19 @@ const ChatMessage = ({
     },
     { title: 'Share', systemIcon: 'square.and.arrow.up', action: () => shareImage(imageUrl!) },
   ];
+
   return (
-    <View style={styles.row}>
-      {role === Role.Bot ? (
-        <View style={[styles.item]}>
-          <Image source={require('~/assets/images/logo-white.png')} style={styles.avatar} />
-        </View>
-      ) : (
-        <Image source={{ uri: 'http://galaxies.dev/img/meerkat_2.jpg' }} style={styles.avatar} />
+    <View style={[styles.row, { justifyContent: isUser ? 'flex-end' : 'flex-start' }]}>
+      {!isUser && (
+        <Image source={require('~/assets/images/logo-white.png')} style={styles.avatar} />
       )}
+
       {loading ? (
         <View style={styles.loading}>
           <ActivityIndicator color={Colors.primary} />
         </View>
       ) : (
-        <View>
+        <View style={[styles.bubble, isUser ? styles.userBubble : styles.botBubble]}>
           {content === '' && imageUrl ? (
             <ContextMenu.Root>
               <ContextMenu.Trigger>
@@ -50,7 +50,7 @@ const ChatMessage = ({
                 </Link>
               </ContextMenu.Trigger>
               <ContextMenu.Content>
-                {contextItems.map((item, index) => (
+                {contextItems.map((item) => (
                   <ContextMenu.Item key={item.title} onSelect={item.action}>
                     <ContextMenu.ItemTitle>{item.title}</ContextMenu.ItemTitle>
                     <ContextMenu.ItemIcon ios={{ name: item.systemIcon, pointSize: 18 }} />
@@ -59,11 +59,13 @@ const ChatMessage = ({
               </ContextMenu.Content>
             </ContextMenu.Root>
           ) : (
-            <View style={{ paddingRight: 14 }}>
-              <Text style={styles.text}>{content}</Text>
-            </View>
+            <Text style={[styles.text, isUser ? styles.userText : styles.botText]}>{content}</Text>
           )}
         </View>
+      )}
+
+      {isUser && (
+        <Image source={{ uri: 'http://galaxies.dev/img/meerkat_2.jpg' }} style={styles.avatar} />
       )}
     </View>
   );
@@ -74,17 +76,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     paddingHorizontal: 14,
-    gap: 14,
-    marginVertical: 12,
-  },
-  item: {
-    borderRadius: 15,
-    overflow: 'hidden',
-  },
-  btnImage: {
-    margin: 6,
-    width: 16,
-    height: 16,
+    marginVertical: 6,
+    gap: 8,
   },
   avatar: {
     width: 30,
@@ -92,11 +85,28 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: '#000',
   },
+  bubble: {
+    maxWidth: '75%',
+    borderRadius: 16,
+    padding: 10,
+  },
+  userBubble: {
+    backgroundColor: '#007AFF',
+    borderTopRightRadius: 0,
+  },
+  botBubble: {
+    backgroundColor: '#E5E5EA',
+    borderTopLeftRadius: 0,
+  },
   text: {
-    padding: 4,
     fontSize: 16,
-    flexWrap: 'wrap',
-    flex: 1,
+    lineHeight: 22,
+  },
+  userText: {
+    color: '#fff',
+  },
+  botText: {
+    color: '#000',
   },
   previewImage: {
     width: 240,

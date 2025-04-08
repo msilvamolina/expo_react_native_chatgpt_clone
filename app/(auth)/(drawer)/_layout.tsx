@@ -7,10 +7,12 @@ import {
   DrawerContentScrollView,
   DrawerItem,
   DrawerItemList,
+  useDrawerStatus,
 } from '@react-navigation/drawer';
 import { DrawerActions } from '@react-navigation/native';
 import { Link, useNavigation, useNavigationContainerRef, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
+import { useEffect } from 'react';
 import {
   TextInput,
   Text,
@@ -19,6 +21,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   useWindowDimensions,
+  Keyboard,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -28,7 +31,14 @@ import Colors from '~/constants/Colors';
 
 export function CustomDrawerContent(props: any) {
   const { bottom, top } = useSafeAreaInsets();
+  const isDrawerOpen = useDrawerStatus() === 'open';
   const router = useRouter();
+
+  useEffect(() => {
+    if (isDrawerOpen) {
+      Keyboard.dismiss();
+    }
+  }, [isDrawerOpen]);
 
   return (
     <View style={{ flex: 1, marginTop: top }}>

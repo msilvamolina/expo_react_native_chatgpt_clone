@@ -47,7 +47,6 @@ export function CustomDrawerContent(props: any) {
   }, [isDrawerOpen]);
 
   const loadChats = async () => {
-    console.log('loadChats');
     const result = await getChats(db);
     console.log('Got Chats:', result);
     setHistory(result);
@@ -93,7 +92,16 @@ export function CustomDrawerContent(props: any) {
           )}
           onPress={() => router.push('/(auth)/(drawer)/explore')}
         />
+
+        {history.map((chat) => (
+          <DrawerItem
+            key={chat.id}
+            label={chat.title}
+            onPress={() => router.push(`/(auth)/(drawer)/(chat)/${chat.id}`)}
+          />
+        ))}
       </DrawerContentScrollView>
+
       <View style={{ padding: 16, paddingBottom: bottom }}>
         <Link href="/(auth)/(modal)/settings" asChild>
           <TouchableOpacity style={styles.footer}>

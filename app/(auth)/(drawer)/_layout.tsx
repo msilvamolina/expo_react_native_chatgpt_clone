@@ -12,7 +12,8 @@ import {
 import { DrawerActions } from '@react-navigation/native';
 import { Link, useNavigation, useNavigationContainerRef, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
-import { useEffect } from 'react';
+import { useSQLiteContext } from 'expo-sqlite';
+import { useEffect, useState } from 'react';
 import {
   TextInput,
   Text,
@@ -28,17 +29,29 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import NewChat from './(chat)/new';
 
 import Colors from '~/constants/Colors';
+import { getChats } from '~/utils/Database';
+import { Chat } from '~/utils/interfaces';
 
 export function CustomDrawerContent(props: any) {
   const { bottom, top } = useSafeAreaInsets();
   const isDrawerOpen = useDrawerStatus() === 'open';
+  const [history, setHistory] = useState<Chat[]>([]);
+  const db = useSQLiteContext();
   const router = useRouter();
 
   useEffect(() => {
     if (isDrawerOpen) {
-      Keyboard.dismiss();
+      loadChats();
     }
+    Keyboard.dismiss();
   }, [isDrawerOpen]);
+
+  const loadChats = async () => {
+    console.log('loadChats');
+    const result = await getChats(db);
+    console.log('Got Chats:', result);
+    setHistory(result);
+  };
 
   return (
     <View style={{ flex: 1, marginTop: top }}>

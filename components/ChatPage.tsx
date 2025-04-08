@@ -63,33 +63,27 @@ const ChatPage = () => {
   const openAi = useMemo(() => new OpenAI({ apiKey: key, organization }), []);
 
   const getCompletion = async (message: string) => {
-    if (message.length === 0) {
-      const result = await addChat(db, message);
+    // si es el primer mensaje, creamos el chat
+    if (messages.length === 0) {
+      const result = await addChat(db, message); // usá el mensaje como título
       const chatID = result.lastInsertRowId;
       setChatId(chatID.toString());
-      addMessage(db, chatID, { content: message, role: Role.User });
+      await addMessage(db, chatID, { content: message, role: Role.User });
+    } else {
+      await addMessage(db, parseInt(chatIdRef.current), { content: message, role: Role.User });
     }
 
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      {
-        content: message,
-        role: Role.User,
-      },
+    setMessages((prev) => [
+      ...prev,
+      { content: message, role: Role.User },
       { role: Role.Bot, content: '' },
     ]);
 
     openAi.chat.stream({
-      messages: [
-        {
-          role: 'user',
-          content: message,
-        },
-      ],
+      messages: [{ role: 'user', content: message }],
       model: gptVersion === '4' ? 'gpt-4' : 'gpt-3.5-turbo',
     });
   };
-
   const onLayout = (event: any) => {
     const { height } = event.nativeEvent.layout;
     console.log('Height:', height);

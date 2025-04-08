@@ -35,6 +35,25 @@ const Layout = () => {
             }}
           />
           <Stack.Screen
+            name="(modal)/purchase"
+            options={{
+              headerTitle: '',
+              presentation: 'fullScreenModal',
+              headerShadowVisible: false,
+              headerLeft: () => (
+                <>
+                  {router.canGoBack() && (
+                    <TouchableOpacity
+                      onPress={() => router.back()}
+                      style={{ borderRadius: 20, padding: 6 }}>
+                      <Ionicons name="close-outline" size={28} color={Colors.greyLight} />
+                    </TouchableOpacity>
+                  )}
+                </>
+              ),
+            }}
+          />
+          <Stack.Screen
             name="(modal)/[url]"
             options={{
               headerTitle: '',

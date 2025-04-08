@@ -7,7 +7,7 @@ import {
   useDrawerStatus,
 } from '@react-navigation/drawer';
 import { DrawerActions } from '@react-navigation/native';
-import { Link, useNavigation, useNavigationContainerRef, useRouter } from 'expo-router';
+import { Link, router, useNavigation, useNavigationContainerRef, useRouter } from 'expo-router';
 import { Drawer } from 'expo-router/drawer';
 import { useSQLiteContext } from 'expo-sqlite';
 import { useEffect, useState } from 'react';
@@ -28,6 +28,7 @@ import * as ContextMenu from 'zeego/context-menu';
 import NewChat from './(chat)/new';
 
 import Colors from '~/constants/Colors';
+import { useRevenueCat } from '~/providers/RevenueCatProvider';
 import { deleteChat, getChats, renameChat } from '~/utils/Database';
 import { Chat } from '~/utils/interfaces';
 
@@ -37,6 +38,7 @@ export function CustomDrawerContent(props: any) {
   const [history, setHistory] = useState<Chat[]>([]);
   const db = useSQLiteContext();
   const router = useRouter();
+  const { user } = useRevenueCat();
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -104,7 +106,11 @@ export function CustomDrawerContent(props: any) {
               <Image source={require('~/assets/images/dalle.png')} style={styles.dalleEImage} />
             </View>
           )}
-          onPress={() => router.push('/(auth)/(drawer)/dalle')}
+          onPress={() =>
+            user.dalle
+              ? router.push('/(auth)/(drawer)/dalle')
+              : router.push('/(auth)/(modal)/purchase')
+          }
         />
         <DrawerItem
           label="Explore GPTs"
@@ -175,6 +181,7 @@ export function CustomDrawerContent(props: any) {
 const Layout = () => {
   const navigationRef = useNavigationContainerRef();
   const dimensions = useWindowDimensions();
+  const { user } = useRevenueCat();
   return (
     <Drawer
       drawerContent={(props) => <CustomDrawerContent {...props} />}
@@ -221,6 +228,16 @@ const Layout = () => {
         name="dalle"
         options={{
           title: 'Dall-E',
+        }}
+        listeners={{
+          drawerItemPress: (e) => {
+            e.preventDefault();
+            if (user.dalle) {
+              router.push('/(auth)/(drawer)/dalle');
+            } else {
+              router.push('/(auth)/(modal)/purchase');
+            }
+          },
         }}
       />
       <Drawer.Screen

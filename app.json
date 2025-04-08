@@ -2,18 +2,21 @@
   "expo": {
     "name": "wavichatai",
     "slug": "wavichatai",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "scheme": "wavichatai",
     "ios": {
-      "buildNumber": "2",
+      "buildNumber": "3",
       "supportsTablet": true,
       "bundleIdentifier": "com.waviproject.wavichatai",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
+      },
+      "entitlements": {
+        "aps-environment": "production"
       }
     },
     "android": {
-      "versionCode": 2,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

@@ -27,7 +27,7 @@ const ChatMessage = ({
     <View style={styles.row}>
       {role === Role.Bot ? (
         <View style={[styles.item]}>
-          <Image source={require('~/assets/images/logo-white.png')} style={styles.avatarBot} />
+          <Image source={require('~/assets/images/logo-white.png')} style={styles.avatar} />
         </View>
       ) : (
         <Image source={{ uri: 'http://galaxies.dev/img/meerkat_2.jpg' }} style={styles.avatar} />
@@ -59,7 +59,9 @@ const ChatMessage = ({
               </ContextMenu.Content>
             </ContextMenu.Root>
           ) : (
-            <Text style={styles.text}>{content}</Text>
+            <View style={{ paddingRight: 14 }}>
+              <Text style={styles.text}>{content}</Text>
+            </View>
           )}
         </View>
       )}
@@ -68,16 +70,6 @@ const ChatMessage = ({
 };
 
 const styles = StyleSheet.create({
-  previewImage: {
-    width: 240,
-    height: 240,
-    borderRadius: 10,
-  },
-  loading: {
-    justifyContent: 'center',
-    height: 26,
-    marginLeft: 14,
-  },
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -88,30 +80,33 @@ const styles = StyleSheet.create({
   item: {
     borderRadius: 15,
     overflow: 'hidden',
-    backgroundColor: '#000',
-  },
-  avatar: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-  },
-  avatarBot: {
-    width: 20,
-    height: 20,
-    margin: 5,
-    borderRadius: 15,
-    backgroundColor: '#000',
   },
   btnImage: {
     margin: 6,
     width: 16,
     height: 16,
   },
+  avatar: {
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: '#000',
+  },
   text: {
     padding: 4,
     fontSize: 16,
     flexWrap: 'wrap',
     flex: 1,
+  },
+  previewImage: {
+    width: 240,
+    height: 240,
+    borderRadius: 10,
+  },
+  loading: {
+    justifyContent: 'center',
+    height: 26,
+    marginLeft: 14,
   },
 });
 

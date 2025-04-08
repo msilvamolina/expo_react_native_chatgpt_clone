@@ -1,7 +1,8 @@
 import { useAuth } from '@clerk/clerk-react';
 import { FlashList } from '@shopify/flash-list';
 import { Redirect, Stack } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
+import { SQLiteDatabase, useSQLiteContext } from 'expo-sqlite';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -21,20 +22,10 @@ import MessageIdeas from '~/components/MessageIdeas';
 import MessageInput from '~/components/MessageInput';
 import Colors from '~/constants/Colors';
 import { defaultStyles } from '~/constants/Styles';
+import { addChat, addMessage } from '~/utils/Database';
 import { Storage } from '~/utils/Storage';
 import { Message, Role } from '~/utils/interfaces';
 
-const DUMMY_MESSAGES: Message[] = [
-  {
-    content: 'Hello, how can I help you today?',
-    role: Role.Bot,
-  },
-  {
-    content:
-      'I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app. I need help with muy React Native app',
-    role: Role.User,
-  },
-];
 const Page = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [height, setHeight] = useState(0);
@@ -42,6 +33,15 @@ const Page = () => {
   const [key, setKey] = useMMKVString('apiKey', Storage);
   const [organization, setOrganization] = useMMKVString('org', Storage);
   const [gptVersion, setGPTVersion] = useMMKVString('gptVersion', Storage);
+
+  const db = useSQLiteContext();
+  const [chatId, _setChatId] = useState<string>('');
+  const chatIdRef = useRef(chatId);
+
+  function setChatId(id: string) {
+    chatIdRef.current = id;
+    _setChatId(id);
+  }
 
   if (!key || key === '' || !organization || organization === '') {
     return <Redirect href="/(auth)/(modal)/settings" />;
@@ -51,8 +51,11 @@ const Page = () => {
   const openAi = useMemo(() => new OpenAI({ apiKey: key, organization }), []);
 
   const getCompletion = async (message: string) => {
-    console.log('Getting completion for:', message);
     if (message.length === 0) {
+      const result = await addChat(db, message);
+      const chatID = result.lastInsertRowId;
+      setChatId(chatID.toString());
+      addMessage(db, chatID, { content: message, role: Role.User });
     }
 
     setMessages((prevMessages) => [
@@ -84,7 +87,6 @@ const Page = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     const handleMessage = (payload: any) => {
-      console.log('Received message:', payload);
       setMessages((messages) => {
         const newMessage = payload.choices[0].delta.content;
 
@@ -94,7 +96,11 @@ const Page = () => {
         }
 
         if (payload.choices[0]?.finishReason) {
-          console.log('Stream ended');
+          console.log('Message:', messages[messages.length - 1].content);
+          addMessage(db, parseInt(chatIdRef.current, 10), {
+            content: messages[messages.length - 1].content,
+            role: Role.Bot,
+          });
         }
         return messages;
       });
